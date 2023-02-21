@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:41:24 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/21 18:30:16 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:03:07 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -75,7 +75,6 @@ t_bool	try_eating(t_philosopher *philosopher, t_rules *rules)
 	sem_post(rules->forks_sem);
 	sem_wait(philosopher->last_meal_sem);
 	philosopher->last_meal = get_time();
-	philosopher->meals++;
 	sem_post(philosopher->last_meal_sem);
 	return (rules->end);
 }
@@ -89,6 +88,7 @@ t_bool	try_sleeping(t_philosopher *philosopher, t_rules *rules)
 	usleep(rules->time_to_sleep * 1000);
 	if (try_ending(philosopher, rules))
 		return (rules->end);
+	philosopher->meals++;
 	return (rules->end);
 }
 
