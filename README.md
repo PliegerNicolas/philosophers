@@ -69,7 +69,7 @@ sem_post, sem_wait, sem_unlink
 
 #### Enter the desired folder (philo or philo_bonus).
 
-```cd philosophers/philo/ or philosophers/philo_bonus```
+```cd philosophers/philo/ or cd philosophers/philo_bonus```
 
 #### Compile the program.
 
