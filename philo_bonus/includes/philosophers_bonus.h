@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/21 18:28:22 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:49:03 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_BONUS_H
@@ -147,6 +147,12 @@ void			create_child(t_philosopher *philosophers,
 t_bool			create_childs(t_philosopher *philosophers, t_rules *rules);
 t_bool			wait_for_childs(t_philosopher *philosophers, t_rules *rules);
 void			*philosopher_routine(void *ptr);
+
+t_bool			try_ending(t_philosopher *philosopher, t_rules *rules);
+t_bool			try_thinking(t_philosopher *philosopher, t_rules *rules);
+t_bool			try_grabbing_forks(t_philosopher *philosopher, t_rules *rules);
+t_bool			try_eating(t_philosopher *philosopher, t_rules *rules);
+t_bool			try_sleeping(t_philosopher *philosopher, t_rules *rules);
 
 /* Output */
 

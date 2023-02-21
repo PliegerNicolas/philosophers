@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/21 18:51:52 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:46:32 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -42,7 +42,8 @@ void	create_child(t_philosopher *philosophers, t_philosopher *philosopher,
 	if (philosopher->pid == 0)
 	{
 		philosopher->last_meal = get_time();
-		if (pthread_create(&philosopher->thread, NULL, &philosopher_routine, philosopher))
+		if (pthread_create(&philosopher->thread, NULL,
+				&philosopher_routine, philosopher))
 		{
 			clear_and_free(rules, philosophers);
 			exit (0);

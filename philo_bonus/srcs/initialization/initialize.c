@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/21 18:29:13 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:44:09 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -34,7 +34,6 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 static t_philosopher	*initialize_philosophers(t_rules *rules)
 {
 	t_philosopher	*philosophers;
-	char			*sem_name;
 	int				i;
 
 	philosophers = malloc(rules->total_philos * sizeof(*philosophers));
@@ -52,21 +51,19 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 		philosophers[i].thread = 0;
 		philosophers[i].exit_thread = 0;
 		philosophers[i].philosophers = NULL;
-		sem_name = generate_sem_name("/last_meal_sem_", philosophers[i].id);
-		if (!sem_name)
-			return (philosophers);
-		philosophers[i].last_meal_sem = sem_open_new(sem_name, 1);
-		free(sem_name);
-		if (!philosophers[i].last_meal_sem)
-			return (philosophers);
+		philosophers[i].last_meal_sem = NULL;
 		rules->created_philos++;
 		i++;
 	}
 	return (philosophers);
 }
 
-static t_bool	initialize_semaphores(t_rules *rules)
+static t_bool	initialize_semaphores(t_philosopher *philosophers,
+	t_rules *rules)
 {
+	char	*sem_name;
+	int		i;
+
 	rules->forks_sem = sem_open_new("/forks", rules->total_philos);
 	if (!rules->forks_sem)
 		return (FALSE);
@@ -76,17 +73,30 @@ static t_bool	initialize_semaphores(t_rules *rules)
 	rules->grabbing_forks_sem = sem_open_new("/grabbing_forks", 1);
 	if (!rules->grabbing_forks_sem)
 		return (FALSE);
+	i = 0;
+	while (i < rules->total_philos)
+	{
+		sem_name = generate_sem_name("/last_meal_sem_", philosophers[i].id);
+		if (!sem_name)
+			return (FALSE);
+		philosophers[i].last_meal_sem = sem_open_new(sem_name, 1);
+		free(sem_name);
+		if (!philosophers[i].last_meal_sem)
+			return (FALSE);
+		i++;
+	}
 	return (TRUE);
 }
 
-t_bool	initialize(t_rules *rules, t_philosopher **philosophers, int argc, char **argv)
+t_bool	initialize(t_rules *rules, t_philosopher **philosophers, int argc,
+	char **argv)
 {
 	if (!initialize_rules(rules, argc, argv))
 		return (FALSE);
 	*philosophers = initialize_philosophers(rules);
 	if (!philosophers)
 		return (FALSE);
-	if (!initialize_semaphores(rules))
+	if (!initialize_semaphores(*philosophers, rules))
 		return (FALSE);
 	return (TRUE);
 }

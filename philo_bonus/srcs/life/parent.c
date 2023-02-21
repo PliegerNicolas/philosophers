@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/21 18:52:02 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/21 19:45:24 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -34,11 +34,9 @@ static void	*exit_thread_routine(void *ptr)
 	}
 	else if (WEXITSTATUS(status) == 2)
 	{
-		rules->all_ate_count++;
-		if (rules->all_ate_count >= rules->total_philos)
+		if (++rules->all_ate_count >= rules->total_philos)
 			put_philosopher_action(philosopher, finished_eating);
 	}
-	//kill(philosopher->pid, SIGKILL);
 	return (NULL);
 }
 
@@ -67,7 +65,8 @@ t_bool	wait_for_childs(t_philosopher *philosophers, t_rules *rules)
 	{
 		philosopher = &philosophers[i];
 		philosopher->philosophers = philosophers;
-		if (pthread_create(&philosopher->exit_thread, NULL, &exit_thread_routine, philosopher))
+		if (pthread_create(&philosopher->exit_thread, NULL,
+				&exit_thread_routine, philosopher))
 		{
 			clear_and_free(rules, philosophers);
 			exit (0);
