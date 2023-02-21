@@ -67,7 +67,7 @@ sem_post, sem_wait, sem_unlink
 
 ```git clone git@github.com:PliegerNicolas/philosophers.git```
 
-#### Enter the desired file (philo or philo_bonus).
+#### Enter the desired folder (philo or philo_bonus).
 
 ```cd philosophers/philo/ or philosophers/philo_bonus```
 
@@ -86,6 +86,7 @@ Execute the desired command :
 ```
 If in philo folder :
 ./philosophers
+
 If in philo_bonus folder :
 ./philosophers_bonus
 
