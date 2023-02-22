@@ -6,10 +6,17 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/22 10:08:52 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/23 00:42:46 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
+
+static void	post_and_clear(t_rules *rules, t_philosopher *philo,
+	t_philosopher *philos)
+{
+	sem_post(philo->last_meal_sem);
+	clear_and_free(rules, philos);
+}
 
 static void	exit_child(t_philosopher *philosophers,
 	t_philosopher *philosopher, t_rules *rules)
@@ -20,18 +27,20 @@ static void	exit_child(t_philosopher *philosophers,
 		if (rules->end)
 		{
 			if (philosopher->status == dead)
-			{
 				put_philosopher_action(philosopher, dead);
-				clear_and_free(rules, philosophers);
-				exit(1);
-			}
 			else if (philosopher->status == finished_eating)
 			{
-				clear_and_free(rules, philosophers);
+				post_and_clear(rules, philosopher, philosophers);
 				exit(2);
 			}
-			clear_and_free(rules, philosophers);
+			post_and_clear(rules, philosopher, philosophers);
 			exit (1);
+		}
+		if (get_time() >= rules->time_to_die + philosopher->last_meal)
+		{
+			put_philosopher_action(philosopher, dead);
+			post_and_clear(rules, philosopher, philosophers);
+			exit(1);
 		}
 		sem_post(philosopher->last_meal_sem);
 	}
