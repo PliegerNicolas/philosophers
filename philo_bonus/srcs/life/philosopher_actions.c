@@ -6,11 +6,32 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/23 00:22:00 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 00:19:52 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
 
+t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
+{
+	if (rules->end)
+		return (rules->end);
+	sem_wait(rules->end_sem);
+	if (rules->max_meals_per_philo >= 0
+		&& philosopher->meals >= rules->max_meals_per_philo)
+	{
+		philosopher->status = finished_eating;
+		rules->end = TRUE;
+	}
+	else if (get_time() >= rules->time_to_die + philosopher->last_meal)
+	{
+		philosopher->status = dead;
+		rules->end = TRUE;
+	}
+	sem_post(rules->end_sem);
+	return (rules->end);
+}
+
+/*
 t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 {
 	sem_wait(rules->end_sem);
@@ -92,3 +113,4 @@ t_bool	try_sleeping(t_philosopher *philosopher, t_rules *rules)
 	philosopher->meals++;
 	return (rules->end);
 }
+*/
