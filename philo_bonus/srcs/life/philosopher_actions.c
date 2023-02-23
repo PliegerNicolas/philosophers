@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 00:47:33 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 00:56:51 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -17,8 +17,10 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 		return (rules->end);
 	sem_wait(rules->end_sem);
 	if (rules->max_meals_per_philo >= 0
-		&& philosopher->meals >= rules->max_meals_per_philo)
+		&& philosopher->meals == rules->max_meals_per_philo)
 	{
+		philosopher->meals++;
+		put_philosopher_action(philosopher, thinking);
 		philosopher->status = finished_eating;
 		rules->end = TRUE;
 	}
@@ -44,7 +46,7 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 	if (philosopher->status != thinking || try_ending(philosopher, rules))
 		return ;
 	sem_wait(rules->grabbing_forks_sem);
-	sem_wait(rules->forks_sem);	
+	sem_wait(rules->forks_sem);
 	put_philosopher_action(philosopher, grabbing_fork);
 	if (rules->total_philos > 1)
 	{
@@ -66,12 +68,12 @@ void	try_eating(t_philosopher *philosopher, t_rules *rules)
 	usleep(rules->time_to_eat * 1000);
 	if (try_ending(philosopher, rules))
 		return ;
+	sem_post(rules->forks_sem);
+	sem_post(rules->forks_sem);
 	sem_wait(philosopher->last_meal_sem);
 	philosopher->last_meal = get_time();
 	philosopher->meals++;
 	sem_post(philosopher->last_meal_sem);
-	sem_post(rules->forks_sem);
-	sem_post(rules->forks_sem);
 }
 
 void	try_sleeping(t_philosopher *philosopher, t_rules *rules)
