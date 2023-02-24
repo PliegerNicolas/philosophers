@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/22 10:09:27 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/24 12:06:16 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -22,6 +22,7 @@ static void	*exit_thread_routine(void *ptr)
 	rules = philosopher->rules;
 	status = 0;
 	waitpid(philosopher->pid, &status, WEXITSTATUS(status));
+	sem_wait(rules->end_sem);
 	if (WEXITSTATUS(status) == 1)
 	{
 		i = 0;
@@ -37,6 +38,7 @@ static void	*exit_thread_routine(void *ptr)
 		if (++rules->all_ate_count >= rules->total_philos)
 			put_philosopher_action(philosopher, finished_eating);
 	}
+	sem_post(rules->end_sem);
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/24 00:43:39 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 12:00:30 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_BONUS_H
@@ -56,6 +56,7 @@ typedef struct s_rules
 	sem_t				*end_sem;
 	sem_t				*forks_sem;
 	sem_t				*grabbing_forks_sem;
+	sem_t				*write_sem;
 }	t_rules;
 
 typedef struct s_philosopher

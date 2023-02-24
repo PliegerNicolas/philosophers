@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/15 20:47:41 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 14:21:01 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -41,6 +41,7 @@ enum e_status
 typedef struct s_rules
 {
 	int					total_philos;
+	int					created_philos;
 	size_t				time_to_die;
 	size_t				time_to_eat;
 	size_t				time_to_sleep;
@@ -48,19 +49,25 @@ typedef struct s_rules
 	int					all_ate_count;
 	size_t				start_time;
 	t_bool				end;
+	pthread_mutex_t		forks_mutex;
 	pthread_mutex_t		end_mutex;
+	pthread_mutex_t		start_time_mutex;
+	pthread_mutex_t		write_mutex;
 }	t_rules;
 
 typedef struct s_philosopher
 {
 	t_rules				*rules;
+	pthread_t			thread;
 	int					id;
 	enum e_status		status;
 	size_t				last_meal;
 	pthread_mutex_t		last_meal_mutex;
 	int					meals;
-	pthread_mutex_t		*left_fork_mutex;
+	pthread_mutex_t		left_fork_mutex;
 	pthread_mutex_t		*right_fork_mutex;
+	t_bool				left_fork;
+	t_bool				*right_fork;
 }	t_philosopher;
 
 /* ************************************** */
@@ -108,10 +115,7 @@ t_bool			ft_str_is_int(char *arg);
 long long int	ft_atolli(const char *nptr);
 long double		ft_atold(const char *str);
 
-t_bool			free_threads_and_philos(pthread_t *threads,
-					t_philosopher *philosophers);
-t_bool			free_all(pthread_t *threads, t_philosopher *philosophers,
-					int malloced_forks);
+t_bool			clear_and_free(t_rules *rules, t_philosopher *philosophers);
 
 size_t			get_time(void);
 
@@ -121,17 +125,20 @@ t_bool			verify_args(int argc, char **argv);
 
 /* Initialization */
 
-void			initialize_rules(t_rules *rules, int argc, char **argv);
-t_bool			initialize_philosophers(t_rules *rules);
+t_bool			initialize(t_rules *rules, t_philosopher **philosophers,
+					int argc, char **argv);
 
 /* Life */
 
-void			*routine(void *ptr);
+t_bool			run_simulation(t_rules *rules, t_philosopher *philosophers);
+void			*monitor_routine(void *ptr);
+void			*philosopher_routine(void *ptr);
+
 t_bool			try_ending(t_philosopher *philosopher, t_rules *rules);
-t_bool			try_thinking(t_philosopher *philosopher, t_rules *rules);
-t_bool			try_grabbing_forks(t_philosopher *philosopher, t_rules *rules);
-t_bool			try_eating(t_philosopher *philosopher, t_rules *rules);
-t_bool			try_sleeping(t_philosopher *philosopher, t_rules *rules);
+void			try_thinking(t_philosopher *philosopher, t_rules *rules);
+void			try_grabbing_forks(t_philosopher *philosopher, t_rules *rules);
+void			try_eating(t_philosopher *philosopher, t_rules *rules);
+void			try_sleeping(t_philosopher *philosopher, t_rules *rules);
 
 /* Output */
 

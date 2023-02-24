@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 00:19:29 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 12:06:40 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -26,6 +26,7 @@ static void	exit_child(t_philosopher *philosophers,
 			}
 			else if (philosopher->status == dead)
 				put_philosopher_action(philosopher, dead);
+			sem_post(rules->end_sem);
 			clear_and_free(rules, philosophers);
 			exit(1);
 		}

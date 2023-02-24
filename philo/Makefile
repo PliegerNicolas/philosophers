@@ -6,7 +6,7 @@
 #    By: nplieger <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/08 09:31:21 by nplieger          #+#    #+#              #
-#    Updated: 2023/02/18 14:04:45 by nicolas          ###   ########.fr        #
+#    Updated: 2023/02/24 11:40:32 by nplieger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,13 +35,10 @@ SRCS				:=		philosophers \
 							utils/time \
 							utils/free \
 							args_verification/verify_args \
-							initialization/initialize_rules \
-							initialization/initialize_philosophers \
+							initialization/initialize \
+							life/run_simulation \
 							life/routine \
-							life/end \
-							life/eat \
-							life/sleep \
-							life/think \
+							life/philosopher_actions \
 
 SRCS_C				:=		$(addsuffix .c, $(SRCS))
 CC_SRCS_C			:=		$(addsuffix $(SRC_DIR)/, $(SRCS_C))
@@ -55,7 +52,7 @@ OBJS				:=		$(SRCS_C:%.c=$(OBJ_DIR)/%.o)
 CC					:=		gcc
 AR					:=		ar -rcs
 INCS				:=		-I $(INC_DIR) -lpthread
-CFLAGS				:=		-Wall -Wextra -Werror -D_REENTRANT -O3
+CFLAGS				:=		-Wall -Wextra -Werror -D_REENTRANT -g3 #-O3
 RM					:=		rm -f
 
 #------------------------------------------------#

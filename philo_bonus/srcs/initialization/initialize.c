@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/21 19:44:09 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/24 12:00:59 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -73,6 +73,9 @@ static t_bool	initialize_semaphores(t_philosopher *philosophers,
 	rules->grabbing_forks_sem = sem_open_new("/grabbing_forks", 1);
 	if (!rules->grabbing_forks_sem)
 		return (FALSE);
+	rules->write_sem = sem_open_new("/write", 1);
+	if (!rules->write_sem)
+		return (FALSE);
 	i = 0;
 	while (i < rules->total_philos)
 	{
@@ -94,7 +97,7 @@ t_bool	initialize(t_rules *rules, t_philosopher **philosophers, int argc,
 	if (!initialize_rules(rules, argc, argv))
 		return (FALSE);
 	*philosophers = initialize_philosophers(rules);
-	if (!philosophers)
+	if (!*philosophers)
 		return (FALSE);
 	if (!initialize_semaphores(*philosophers, rules))
 		return (FALSE);
