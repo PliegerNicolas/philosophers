@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 12:43:53 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 12:58:40 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -32,28 +32,27 @@ static void	initialize_rules(t_rules *rules, int argc, char **argv)
 
 static t_philosopher	*initialize_philosophers(t_rules *rules)
 {
-	t_philosopher	*philosophers;
+	t_philosopher	*phls;
 	int				i;
 
-	philosophers = malloc(rules->total_philos * sizeof(*philosophers));
-	if (!philosophers)
+	phls = malloc(rules->total_philos * sizeof(*phls));
+	if (!phls)
 		return (NULL);
 	i = 0;
 	while (i < rules->total_philos)
 	{
-		philosophers[i].rules = rules;
-		philosophers[i].id = i + 1;
-		philosophers[i].end = FALSE;
-		philosophers[i].status = sleeping;
-		philosophers[i].last_meal = 0;
-		pthread_mutex_init(&philosophers[i].last_meal_mutex, NULL);
-		philosophers[i].meals = 0;
-		pthread_mutex_init(&philosophers[i].left_fork, NULL);
+		phls[i].rules = rules;
+		phls[i].id = i + 1;
+		phls[i].end = FALSE;
+		phls[i].status = sleeping;
+		phls[i].last_meal = 0;
+		phls[i].meals = 0;
+		pthread_mutex_init(&phls[i].last_meal_mutex, NULL);
+		pthread_mutex_init(&phls[i].left_fork, NULL);
 		if (i > 0)
-			philosophers[i - 1].right_fork = &philosophers[i].left_fork;
+			phls[i - 1].right_fork = &phls[i].left_fork;
 		if (rules->total_philos > 1 && i == rules->total_philos - 1)
-			philosophers[i].right_fork
-				= &philosophers[i - rules->total_philos + 1].left_fork;
+			phls[i].right_fork = &phls[i - rules->total_philos + 1].left_fork;
 		rules->created_philos++;
 		i++;
 	}
