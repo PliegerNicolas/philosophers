@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:40:00 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/24 14:11:28 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/25 12:16:20 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -18,7 +18,8 @@ static t_bool	launch_philosophers(t_rules *rules, t_philosopher *philosophers)
 	i = 0;
 	while (i < rules->created_philos)
 	{
-		if (pthread_create(&philosophers[i].thread, NULL, &philosopher_routine, &philosophers[i]))
+		if (pthread_create(&philosophers[i].thread, NULL,
+				&philosopher_routine, &philosophers[i]))
 			return (FALSE);
 		i++;
 	}
@@ -45,11 +46,9 @@ t_bool	run_simulation(t_rules *rules, t_philosopher *philosophers)
 {
 	if (rules->total_philos < 1)
 		return (FALSE);
-	pthread_mutex_lock(&rules->start_time_mutex);
+	rules->start_time = get_time();
 	if (!launch_philosophers(rules, philosophers))
 		return (FALSE);
-	rules->start_time = get_time();
-	pthread_mutex_unlock(&rules->start_time_mutex);
 	if (!join_threads(rules, philosophers))
 		return (FALSE);
 	return (TRUE);

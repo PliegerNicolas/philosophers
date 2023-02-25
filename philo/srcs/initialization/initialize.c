@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/24 15:23:37 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/25 12:43:53 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -27,7 +27,6 @@ static void	initialize_rules(t_rules *rules, int argc, char **argv)
 	rules->start_time = 0;
 	pthread_mutex_init(&rules->forks_mutex, NULL);
 	pthread_mutex_init(&rules->end_mutex, NULL);
-	pthread_mutex_init(&rules->start_time_mutex, NULL);
 	pthread_mutex_init(&rules->write_mutex, NULL);
 }
 
@@ -44,22 +43,17 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 	{
 		philosophers[i].rules = rules;
 		philosophers[i].id = i + 1;
+		philosophers[i].end = FALSE;
 		philosophers[i].status = sleeping;
 		philosophers[i].last_meal = 0;
 		pthread_mutex_init(&philosophers[i].last_meal_mutex, NULL);
 		philosophers[i].meals = 0;
-		pthread_mutex_init(&philosophers[i].left_fork_mutex, NULL);
-		philosophers[i].left_fork = TRUE;
+		pthread_mutex_init(&philosophers[i].left_fork, NULL);
 		if (i > 0)
-		{
-			philosophers[i - 1].right_fork_mutex = &philosophers[i].left_fork_mutex;
 			philosophers[i - 1].right_fork = &philosophers[i].left_fork;
-		}
 		if (rules->total_philos > 1 && i == rules->total_philos - 1)
-		{
-			philosophers[i].right_fork_mutex = &philosophers[i - rules->total_philos + 1].left_fork_mutex;
-			philosophers[i].right_fork = &philosophers[i - rules->total_philos + 1].left_fork;
-		}
+			philosophers[i].right_fork
+				= &philosophers[i - rules->total_philos + 1].left_fork;
 		rules->created_philos++;
 		i++;
 	}

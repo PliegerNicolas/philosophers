@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/24 14:21:01 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/25 12:44:05 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -51,7 +51,6 @@ typedef struct s_rules
 	t_bool				end;
 	pthread_mutex_t		forks_mutex;
 	pthread_mutex_t		end_mutex;
-	pthread_mutex_t		start_time_mutex;
 	pthread_mutex_t		write_mutex;
 }	t_rules;
 
@@ -59,15 +58,14 @@ typedef struct s_philosopher
 {
 	t_rules				*rules;
 	pthread_t			thread;
+	t_bool				end;
 	int					id;
 	enum e_status		status;
+	int					meals;
 	size_t				last_meal;
 	pthread_mutex_t		last_meal_mutex;
-	int					meals;
-	pthread_mutex_t		left_fork_mutex;
-	pthread_mutex_t		*right_fork_mutex;
-	t_bool				left_fork;
-	t_bool				*right_fork;
+	pthread_mutex_t		left_fork;
+	pthread_mutex_t		*right_fork;
 }	t_philosopher;
 
 /* ************************************** */
