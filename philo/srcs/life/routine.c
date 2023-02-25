@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 15:34:19 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/25 12:54:58 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 13:11:15 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -36,7 +36,16 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 		rules->end = TRUE;
 	}
 	pthread_mutex_unlock(&philosopher->last_meal_mutex);
+	pthread_mutex_unlock(&rules->end_mutex);
 	return (philosopher->end | rules->end);
+}
+
+void	try_thinking(t_philosopher *philosopher, t_rules *rules)
+{
+	if (philosopher->status != sleeping || try_ending(philosopher, rules))
+		return ;
+	put_philosopher_action(philosopher, thinking);
+	philosopher->status = thinking;
 }
 
 void	*philosopher_routine(void *ptr)
@@ -49,11 +58,7 @@ void	*philosopher_routine(void *ptr)
 	philosopher->last_meal = get_time();
 	while (!try_ending(philosopher, rules))
 	{
-		pthread_mutex_unlock(&rules->end_mutex);
-		put_philosopher_action(philosopher, eating);
-		philosopher->meals++;
-		usleep(50);
+		try_thinking(philosopher, rules);
 	}
-	pthread_mutex_unlock(&rules->end_mutex);
 	return (NULL);
 }
