@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 15:34:19 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/25 13:36:21 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 13:40:53 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -37,8 +37,7 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 	}
 	pthread_mutex_unlock(&philosopher->last_meal_mutex);
 	pthread_mutex_unlock(&rules->end_mutex);
-	//return (philosopher->end | rules->end);
-	return (philosopher->end);
+	return (philosopher->end | rules->end);
 }
 
 void	try_thinking(t_philosopher *philosopher, t_rules *rules)
@@ -69,15 +68,15 @@ void	try_eating(t_philosopher *philosopher, t_rules *rules)
 {
 	if (philosopher->status != grabbing_fork || try_ending(philosopher, rules))
 	{
-		pthread_mutex_unlock(&philosopher->left_fork);
 		pthread_mutex_unlock(philosopher->right_fork);
+		pthread_mutex_unlock(&philosopher->left_fork);
 		return ;
 	}
 	put_philosopher_action(philosopher, eating);
 	philosopher->status = eating;
 	usleep(rules->time_to_eat * 1000);
-	pthread_mutex_unlock(&philosopher->left_fork);
 	pthread_mutex_unlock(philosopher->right_fork);
+	pthread_mutex_unlock(&philosopher->left_fork);
 	if (try_ending(philosopher, rules))
 		return ;
 	pthread_mutex_lock(&philosopher->last_meal_mutex);
