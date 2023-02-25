@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:40:00 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 12:16:20 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 00:34:50 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -21,6 +21,7 @@ static t_bool	launch_philosophers(t_rules *rules, t_philosopher *philosophers)
 		if (pthread_create(&philosophers[i].thread, NULL,
 				&philosopher_routine, &philosophers[i]))
 			return (FALSE);
+		usleep(1);
 		i++;
 	}
 	return (TRUE);

@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 23:56:58 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 00:47:04 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -15,7 +15,9 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 {
 	pthread_mutex_lock(&rules->end_mutex);
 	pthread_mutex_lock(&philosopher->last_meal_mutex);
-	if (philosopher->meals == rules->max_meals_per_philo)
+	if (rules->end)
+		philosopher->end = TRUE;
+	else if (philosopher->meals == rules->max_meals_per_philo)
 	{
 		philosopher->status = finished_eating;
 		philosopher->meals++;
@@ -34,7 +36,7 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 	}
 	pthread_mutex_unlock(&philosopher->last_meal_mutex);
 	pthread_mutex_unlock(&rules->end_mutex);
-	return (philosopher->end | rules->end);
+	return (philosopher->end);
 }
 
 void	try_thinking(t_philosopher *philosopher, t_rules *rules)
