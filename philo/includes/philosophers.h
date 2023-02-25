@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 13:06:06 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 13:45:37 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_H
@@ -49,7 +49,6 @@ typedef struct s_rules
 	int					all_ate_count;
 	size_t				start_time;
 	t_bool				end;
-	pthread_mutex_t		forks_mutex;
 	pthread_mutex_t		end_mutex;
 	pthread_mutex_t		write_mutex;
 }	t_rules;

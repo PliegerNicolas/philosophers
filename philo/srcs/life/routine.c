@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 15:34:19 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/25 13:40:53 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 14:27:45 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -68,7 +68,8 @@ void	try_eating(t_philosopher *philosopher, t_rules *rules)
 {
 	if (philosopher->status != grabbing_fork || try_ending(philosopher, rules))
 	{
-		pthread_mutex_unlock(philosopher->right_fork);
+		if (rules->created_philos > 1)
+			pthread_mutex_unlock(philosopher->right_fork);
 		pthread_mutex_unlock(&philosopher->left_fork);
 		return ;
 	}

@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 12:59:07 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 13:45:47 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -25,7 +25,6 @@ static void	initialize_rules(t_rules *rules, int argc, char **argv)
 	rules->end = FALSE;
 	rules->all_ate_count = 0;
 	rules->start_time = 0;
-	pthread_mutex_init(&rules->forks_mutex, NULL);
 	pthread_mutex_init(&rules->end_mutex, NULL);
 	pthread_mutex_init(&rules->write_mutex, NULL);
 }
