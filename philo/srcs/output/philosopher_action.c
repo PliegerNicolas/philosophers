@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 18:40:44 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 11:59:57 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/25 23:47:07 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -23,16 +23,16 @@ void	put_philosopher_action(t_philosopher *philo, enum e_status action)
 	else if (action == finished_eating)
 		printf("%s%ld %sAll finished eating%s\n",
 			LIGHT_GRAY, time, GREEN, DEFAULT_COLOR);
-	else if (action == eating)
+	else if (action == eating && !(philo->end | philo->rules->end))
 		printf("%s%ld %s%d%s is eating%s\n", LIGHT_GRAY, time,
 			LIGHT_CYAN, philo->id, LIGHT_GRAY, DEFAULT_COLOR);
-	else if (action == sleeping)
+	else if (action == sleeping && !(philo->end | philo->rules->end))
 		printf("%s%ld %s%d%s is sleeping%s\n", LIGHT_GRAY, time,
 			LIGHT_CYAN, philo->id, LIGHT_GRAY, DEFAULT_COLOR);
-	else if (action == thinking)
+	else if (action == thinking && !(philo->end | philo->rules->end))
 		printf("%s%ld %s%d%s is thinking%s\n", LIGHT_GRAY, time,
 			LIGHT_CYAN, philo->id, LIGHT_GRAY, DEFAULT_COLOR);
-	else if (action == grabbing_fork)
+	else if (action == grabbing_fork && !(philo->end | philo->rules->end))
 		printf("%s%ld %s%d%s has taken a fork%s\n", LIGHT_GRAY,
 			time, LIGHT_CYAN, philo->id, LIGHT_GRAY, DEFAULT_COLOR);
 	pthread_mutex_unlock(&philo->rules->write_mutex);
