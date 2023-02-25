@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/25 12:58:40 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/25 12:59:07 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -56,7 +56,7 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 		rules->created_philos++;
 		i++;
 	}
-	return (philosophers);
+	return (phls);
 }
 
 t_bool	initialize(t_rules *rules, t_philosopher **philosophers,
