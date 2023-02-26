@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 00:23:58 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 11:50:45 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -24,7 +24,7 @@ static void	initialize_rules(t_rules *rules, int argc, char **argv)
 		rules->max_meals_per_philo = -1;
 	rules->end = FALSE;
 	rules->all_ate_count = 0;
-	rules->start_time = 0;
+	rules->start_time = get_time();
 	pthread_mutex_init(&rules->end_mutex, NULL);
 	pthread_mutex_init(&rules->write_mutex, NULL);
 }
@@ -44,7 +44,7 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 		phls[i].id = i + 1;
 		phls[i].end = FALSE;
 		phls[i].status = sleeping;
-		phls[i].last_meal = 0;
+		phls[i].last_meal = get_time();
 		phls[i].meals = 0;
 		pthread_mutex_init(&phls[i].last_meal_mutex, NULL);
 		pthread_mutex_init(&phls[i].left_fork, NULL);

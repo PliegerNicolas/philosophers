@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 15:34:19 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/26 01:22:08 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 12:03:45 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -18,7 +18,8 @@ void	*philosopher_routine(void *ptr)
 
 	philosopher = (t_philosopher *)ptr;
 	rules = philosopher->rules;
-	philosopher->last_meal = get_time();
+	if (philosopher->id % 2 == 0)
+		usleep(1000);
 	while (!try_ending(philosopher, rules))
 	{
 		try_thinking(philosopher, rules);

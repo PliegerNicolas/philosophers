@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:40:00 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 00:52:38 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 11:50:35 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -46,7 +46,6 @@ t_bool	run_simulation(t_rules *rules, t_philosopher *philosophers)
 {
 	if (rules->total_philos < 1)
 		return (FALSE);
-	rules->start_time = get_time();
 	if (!launch_philosophers(rules, philosophers))
 		return (FALSE);
 	if (!join_threads(rules, philosophers))
