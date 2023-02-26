@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 10:17:02 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 11:50:45 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 16:23:04 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -43,7 +43,7 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 		phls[i].rules = rules;
 		phls[i].id = i + 1;
 		phls[i].end = FALSE;
-		phls[i].status = sleeping;
+		phls[i].status = thinking;
 		phls[i].last_meal = get_time();
 		phls[i].meals = 0;
 		pthread_mutex_init(&phls[i].last_meal_mutex, NULL);

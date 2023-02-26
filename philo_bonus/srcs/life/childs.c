@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 12:06:40 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/26 16:47:36 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -22,6 +22,7 @@ static void	exit_child(t_philosopher *philosophers,
 			if (philosopher->status == finished_eating)
 			{
 				sem_post(rules->end_sem);
+				clear_and_free(rules, philosophers);
 				exit(2);
 			}
 			else if (philosopher->status == dead)

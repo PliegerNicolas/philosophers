@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 11:48:10 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 16:24:28 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -46,6 +46,8 @@ void	try_thinking(t_philosopher *philosopher, t_rules *rules)
 		return ;
 	put_philosopher_action(philosopher, thinking);
 	philosopher->status = thinking;
+	if (rules->total_philos % 2 != 0)
+		usleep(rules->time_to_eat * ((rules->time_to_eat + 5) > rules->time_to_sleep) * 1000);
 }
 
 void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
