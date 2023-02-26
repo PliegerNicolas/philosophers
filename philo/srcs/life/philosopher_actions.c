@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 00:47:04 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/26 01:23:25 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -22,6 +22,7 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 		philosopher->status = finished_eating;
 		philosopher->meals++;
 		rules->all_ate_count++;
+		put_philosopher_action(philosopher, thinking);
 		if (rules->all_ate_count == rules->created_philos)
 			put_philosopher_action(philosopher, finished_eating);
 		philosopher->end = TRUE;
