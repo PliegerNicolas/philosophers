@@ -1,7 +1,7 @@
 
 # Philosophers
 
-A 42 school project. It's purpose is to train the student about threads and mutexes (standard version). And forks and semaphores (bonus version).
+A 42 school project. It's purpose is to teach the student about threads and mutexes (standard version). And forks and semaphores (bonus version).
 
 ## Standard version
 
