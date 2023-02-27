@@ -94,3 +94,14 @@ This should display the expected arguments.
 ```
 
 Next ... Have fun !
+
+# Tips for 42 students.
+
+Use valgrind --tool=helgrind on launch or -fsanitize=thread in compilation to test deadlocks, data races, etc.
+
+Philo :
+There is a strategy based on parity to prevent deadlocks. But you should also think about priority and hierarchy in grabbing forks. The problem is that threads can some times have latency when launching so you have to add security (see srcs/life/philosopher_actions (try_thinking)).
+
+Philo_bonus :
+By using exit(exit_code) i can interpret the exit_code as information (finished eating or philosopher died).
+My main process runs one thread for every created fork and waits for their exit. The forks themselves launch a thread to monitor the philosopher's life cycle.
