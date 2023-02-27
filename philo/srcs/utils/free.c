@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 20:35:17 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/25 14:20:24 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 15:27:34 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -17,6 +17,7 @@ t_bool	clear_and_free(t_rules *rules, t_philosopher *philosophers)
 
 	pthread_mutex_destroy(&rules->write_mutex);
 	pthread_mutex_destroy(&rules->end_mutex);
+	pthread_mutex_destroy(&rules->last_write_mutex);
 	if (philosophers)
 	{
 		i = 0;

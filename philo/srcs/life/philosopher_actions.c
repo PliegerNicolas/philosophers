@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/27 15:21:36 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 15:28:08 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -31,7 +31,9 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 	{
 		if (!rules->end)
 			put_philosopher_action(philosopher, dead);
+		pthread_mutex_lock(&rules->last_write_mutex);
 		rules->end = TRUE;
+		pthread_mutex_unlock(&rules->last_write_mutex);
 	}
 	pthread_mutex_unlock(&philosopher->last_meal_mutex);
 	pthread_mutex_unlock(&rules->end_mutex);
