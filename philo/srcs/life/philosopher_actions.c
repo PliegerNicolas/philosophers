@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/27 15:28:08 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 15:36:28 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -76,7 +76,10 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 			put_philosopher_action(philosopher, grabbing_fork);
 		}
 		else
+		{
 			usleep(rules->time_to_die * 1000);
+			return ;
+		}
 	}
 	philosopher->status = grabbing_fork;
 }
