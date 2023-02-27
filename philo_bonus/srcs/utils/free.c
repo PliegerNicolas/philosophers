@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 20:35:17 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/26 16:40:25 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/27 04:03:57 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -23,6 +23,8 @@ t_bool	clear_and_free(t_rules *rules, t_philosopher *philosophers)
 		sem_close(rules->grabbing_forks_sem);
 	if (rules->write_sem)
 		sem_close(rules->write_sem);
+	if (rules->dead_sem)
+		sem_close(rules->dead_sem);
 	if (philosophers)
 	{
 		i = 0;

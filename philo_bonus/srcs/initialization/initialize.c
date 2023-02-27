@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/27 03:30:48 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 04:00:27 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -28,6 +28,7 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 	rules->forks_sem = NULL;
 	rules->grabbing_forks_sem = NULL;
 	rules->end_sem = NULL;
+	rules->dead_sem = NULL;
 	return (TRUE);
 }
 
@@ -70,6 +71,9 @@ static t_bool	initialize_rules_semaphores(t_rules *rules)
 	if (!rules->grabbing_forks_sem)
 		return (FALSE);
 	rules->write_sem = sem_open_new("/write", 1);
+	if (!rules->write_sem)
+		return (FALSE);
+	rules->dead_sem = sem_open_new("/dead", 0);
 	if (!rules->write_sem)
 		return (FALSE);
 	return (TRUE);

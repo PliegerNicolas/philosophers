@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/24 12:00:30 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/27 04:02:04 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_BONUS_H
@@ -53,6 +53,7 @@ typedef struct s_rules
 	int					all_ate_count;
 	size_t				start_time;
 	t_bool				end;
+	sem_t				*dead_sem;
 	sem_t				*end_sem;
 	sem_t				*forks_sem;
 	sem_t				*grabbing_forks_sem;
