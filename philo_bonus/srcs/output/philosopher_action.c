@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 18:40:44 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/26 16:28:40 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/27 11:38:31 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -15,6 +15,8 @@ void	put_philosopher_action(t_philosopher *philo, enum e_status action)
 {
 	size_t		time;
 
+	if (philo->rules->write_sem->__align == 2)
+		return ;
 	sem_wait(philo->rules->write_sem);
 	time = get_time() - philo->rules->start_time;
 	if (action == dead)
