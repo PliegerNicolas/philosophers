@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/27 04:08:47 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 11:34:08 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -18,9 +18,6 @@ static void	kill_processes_on_death(t_philosopher *philosopher, t_rules *rules)
 	i = 0;
 	while (i < rules->total_philos)
 	{
-		if (!rules->dead_sem->__align)
-			put_philosopher_action(philosopher, dead);
-		sem_post(rules->dead_sem);
 		if ((i + 1) != philosopher->id)
 			kill(philosopher->philosophers[i].pid, SIGKILL);
 		i++;
