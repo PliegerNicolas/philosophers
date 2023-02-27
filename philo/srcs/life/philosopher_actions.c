@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/27 03:47:51 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/27 15:21:36 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -31,8 +31,6 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 	{
 		if (!rules->end)
 			put_philosopher_action(philosopher, dead);
-		philosopher->status = dead;
-		philosopher->end = TRUE;
 		rules->end = TRUE;
 	}
 	pthread_mutex_unlock(&philosopher->last_meal_mutex);
@@ -83,6 +81,8 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 
 void	try_eating(t_philosopher *philosopher, t_rules *rules)
 {
+	if (philosopher->end)
+		return ;
 	if (philosopher->status != grabbing_fork || try_ending(philosopher, rules))
 	{
 		pthread_mutex_unlock(&philosopher->left_fork);
