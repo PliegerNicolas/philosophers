@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 09:55:46 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/26 16:24:28 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/27 03:47:51 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers.h"
@@ -42,12 +42,17 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 
 void	try_thinking(t_philosopher *philosopher, t_rules *rules)
 {
+	static t_bool	start;
+
 	if (philosopher->status != sleeping || try_ending(philosopher, rules))
 		return ;
 	put_philosopher_action(philosopher, thinking);
 	philosopher->status = thinking;
-	if (rules->total_philos % 2 != 0)
-		usleep(rules->time_to_eat * ((rules->time_to_eat + 5) > rules->time_to_sleep) * 1000);
+	if (rules->total_philos % 2 != 0 && start)
+		usleep(rules->time_to_eat
+			* ((rules->time_to_eat + 5) > rules->time_to_sleep) * 1000);
+	if (!start)
+		start = TRUE;
 }
 
 void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)

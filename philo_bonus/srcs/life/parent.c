@@ -6,39 +6,37 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 12:06:16 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/27 03:31:15 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
 
 static void	*exit_thread_routine(void *ptr)
 {
-	t_philosopher	*philosopher;
-	t_rules			*rules;
+	t_philosopher	*philo;
 	int				status;
 	int				i;
 
-	philosopher = (t_philosopher *)ptr;
-	rules = philosopher->rules;
+	philo = (t_philosopher *)ptr;
 	status = 0;
-	waitpid(philosopher->pid, &status, WEXITSTATUS(status));
-	sem_wait(rules->end_sem);
+	waitpid(philo->pid, &status, WEXITSTATUS(status));
+	sem_wait(philo->rules->end_sem);
 	if (WEXITSTATUS(status) == 1)
 	{
 		i = 0;
-		while (i < rules->total_philos)
+		while (i < philo->rules->total_philos)
 		{
-			if ((i + 1) != philosopher->id)
-				kill(philosopher->philosophers[i].pid, SIGKILL);
+			if ((i + 1) != philo->id)
+				kill(philo->philosophers[i].pid, SIGKILL);
 			i++;
 		}
 	}
 	else if (WEXITSTATUS(status) == 2)
 	{
-		if (++rules->all_ate_count >= rules->total_philos)
-			put_philosopher_action(philosopher, finished_eating);
+		if (++philo->rules->all_ate_count >= philo->rules->total_philos)
+			put_philosopher_action(philo, finished_eating);
 	}
-	sem_post(rules->end_sem);
+	sem_post(philo->rules->end_sem);
 	return (NULL);
 }
 
