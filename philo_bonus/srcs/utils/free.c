@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 20:35:17 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/27 04:03:57 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 15:26:00 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -15,8 +15,6 @@ t_bool	clear_and_free(t_rules *rules, t_philosopher *philosophers)
 {
 	int		i;
 
-	if (rules->end_sem)
-		sem_close(rules->end_sem);
 	if (rules->forks_sem)
 		sem_close(rules->forks_sem);
 	if (rules->grabbing_forks_sem)

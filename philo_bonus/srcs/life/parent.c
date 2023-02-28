@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/27 11:34:08 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 15:25:41 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -80,6 +80,8 @@ t_bool	wait_for_childs(t_philosopher *philosophers, t_rules *rules)
 		i++;
 	}
 	join_threads(philosophers, rules);
+	if (philosophers->rules->end_sem)
+		sem_close(philosophers->rules->end_sem);
 	return (TRUE);
 }
 
