@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 22:08:53 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 23:16:44 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -21,7 +21,7 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 		|| *philosopher->ate_enough)
 	{
 		sem_post(rules->eating_sem);
-		if (!rules->end && !*philosopher->ate_enough)
+		if (!*rules->end && !*philosopher->ate_enough)
 		{
 			sem_post(rules->finish_sem);
 			*rules->end = TRUE;

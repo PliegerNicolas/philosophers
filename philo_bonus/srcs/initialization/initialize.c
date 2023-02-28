@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 22:07:06 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 23:11:36 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -22,7 +22,10 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 		rules->max_meals_per_philo = (int)ft_atolli(argv[4]);
 	else
 		rules->max_meals_per_philo = -1;
-	rules->end = FALSE;
+	rules->end = malloc(sizeof(*rules->end));
+	if (!rules->end)
+		return (FALSE);
+	*rules->end = FALSE;
 	rules->all_ate_count = 0;
 	rules->start_time = 0;
 	rules->forks_sem = NULL;
@@ -34,22 +37,24 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 	return (TRUE);
 }
 
-static void	initialize_philosopher(t_philosopher *philosopher, t_rules *rules)
+static t_bool	initialize_philosopher(t_philosopher *philosopher, t_rules *rules)
 {
-	size_t	last_meal;
-	t_bool	ate_enough;
-
 	philosopher->rules = rules;
 	philosopher->pid = -1;
 	philosopher->status = sleeping;
 	philosopher->meals = 0;
-	last_meal = 0;
-	philosopher->last_meal = &last_meal;
-	ate_enough = FALSE;
-	philosopher->ate_enough = &ate_enough;
+	philosopher->last_meal = malloc(sizeof(*philosopher->last_meal));
+	if (!philosopher->last_meal)
+		return (FALSE);
+	philosopher->ate_enough = malloc(sizeof(*philosopher->ate_enough));
+	if (!philosopher->ate_enough)
+		return (FALSE);
+	*philosopher->last_meal = 0;
+	*philosopher->ate_enough = FALSE;
 	philosopher->thread = 0;
 	philosopher->exit_thread = 0;
 	philosopher->philosophers = NULL;
+	return (TRUE);
 }
 
 static t_philosopher	*initialize_philosophers(t_rules *rules)
