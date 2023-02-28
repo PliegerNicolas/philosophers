@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/28 17:19:13 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 21:41:27 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_BONUS_H
@@ -52,7 +52,7 @@ typedef struct s_rules
 	int					max_meals_per_philo;
 	int					all_ate_count;
 	size_t				start_time;
-	t_bool				end;
+	t_bool				*end;
 	sem_t				*forks_sem;
 	sem_t				*write_sem;
 	sem_t				*grabbing_forks_sem;

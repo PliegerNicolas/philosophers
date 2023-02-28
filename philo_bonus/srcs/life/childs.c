@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 17:38:01 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 21:42:51 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -27,6 +27,8 @@ static void	exit_child(t_philosopher *philosophers,
 		sem_wait(rules->finish_sem);
 		if(get_time() > *philosopher->last_meal + rules->time_to_die)
 		{
+			if (!rules->end)
+				put_philosopher_action(philosopher, dead);
 			clear_and_free(rules, philosophers);
 			exit (1);
 		}

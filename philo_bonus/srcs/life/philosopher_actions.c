@@ -6,13 +6,15 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 17:53:02 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 21:56:35 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
 
 t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 {
+	if (*philosopher->ate_enough)
+		return (FALSE);
 	sem_wait(rules->eating_sem);
 	sem_wait(rules->finish_sem);
 	if ((get_time() > *philosopher->last_meal + rules->time_to_die) || *philosopher->ate_enough)
@@ -21,6 +23,7 @@ t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 		if (!rules->end && !*philosopher->ate_enough)
 		{
 			sem_post(rules->finish_sem);
+			*rules->end = TRUE;
 			put_philosopher_action(philosopher, dead);
 		}
 		sem_post(rules->finish_sem);
