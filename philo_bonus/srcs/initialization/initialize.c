@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 17:20:15 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 22:07:06 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -34,19 +34,22 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 	return (TRUE);
 }
 
-static void	set_pointer_for_last_meal(t_philosopher *philosopher)
+static void	initialize_philosopher(t_philosopher *philosopher, t_rules *rules)
 {
 	size_t	last_meal;
+	t_bool	ate_enough;
 
+	philosopher->rules = rules;
+	philosopher->pid = -1;
+	philosopher->status = sleeping;
+	philosopher->meals = 0;
 	last_meal = 0;
 	philosopher->last_meal = &last_meal;
-}
-
-static void	set_pointer_for_ate_enough(t_philosopher *philosopher)
-{
-	t_bool	ate_enough;
 	ate_enough = FALSE;
 	philosopher->ate_enough = &ate_enough;
+	philosopher->thread = 0;
+	philosopher->exit_thread = 0;
+	philosopher->philosophers = NULL;
 }
 
 static t_philosopher	*initialize_philosophers(t_rules *rules)
@@ -60,16 +63,8 @@ static t_philosopher	*initialize_philosophers(t_rules *rules)
 	i = 0;
 	while (i < rules->total_philos)
 	{
-		philosophers[i].rules = rules;
 		philosophers[i].id = i + 1;
-		philosophers[i].pid = -1;
-		philosophers[i].status = sleeping;
-		philosophers[i].meals = 0;
-		set_pointer_for_ate_enough(&philosophers[i]);
-		set_pointer_for_last_meal(&philosophers[i]);
-		philosophers[i].thread = 0;
-		philosophers[i].exit_thread = 0;
-		philosophers[i].philosophers = NULL;
+		initialize_philosopher(&philosophers[i], rules);
 		rules->created_philos++;
 		i++;
 	}

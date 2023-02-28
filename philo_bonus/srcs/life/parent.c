@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 16:30:58 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 17:33:41 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 22:08:34 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -39,7 +39,6 @@ static void	*exit_thread_routine(void *ptr)
 	else if (WEXITSTATUS(status) == 2)
 	{
 		sem_wait(rules->eating_sem);
-		//printf("%s%d%s\n", RED, rules->all_ate_count, DEFAULT_COLOR);
 		if (++rules->all_ate_count >= rules->total_philos)
 			put_philosopher_action(philosopher, finished_eating);
 		sem_post(rules->eating_sem);
