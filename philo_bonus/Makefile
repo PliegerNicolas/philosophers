@@ -6,7 +6,7 @@
 #    By: nplieger <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/08 09:31:21 by nplieger          #+#    #+#              #
-#    Updated: 2023/02/28 14:56:56 by nplieger         ###   ########.fr        #
+#    Updated: 2023/02/28 17:27:32 by nplieger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ OBJS				:=		$(SRCS_C:%.c=$(OBJ_DIR)/%.o)
 CC					:=		gcc
 AR					:=		ar -rcs
 INCS				:=		-I $(INC_DIR) -lpthread
-CFLAGS				:=		-Wall -Wextra -Werror -D_REENTRANT -O3 -fsanitize=thread
+CFLAGS				:=		-Wall -Wextra -Werror -D_REENTRANT -O3 #-fsanitize=thread
 RM					:=		rm -f
 
 #------------------------------------------------#

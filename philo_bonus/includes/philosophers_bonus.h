@@ -6,7 +6,7 @@
 /*   By: nplieger <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/08 09:32:06 by nplieger          #+#    #+#             */
-/*   Updated: 2023/02/27 04:02:04 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 17:19:13 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef PHILOSOPHERS_BONUS_H
@@ -53,11 +53,12 @@ typedef struct s_rules
 	int					all_ate_count;
 	size_t				start_time;
 	t_bool				end;
-	sem_t				*dead_sem;
-	sem_t				*end_sem;
 	sem_t				*forks_sem;
-	sem_t				*grabbing_forks_sem;
 	sem_t				*write_sem;
+	sem_t				*grabbing_forks_sem;
+	sem_t				*end_sem;
+	sem_t				*eating_sem;
+	sem_t				*finish_sem;
 }	t_rules;
 
 typedef struct s_philosopher
@@ -70,8 +71,8 @@ typedef struct s_philosopher
 	int						id;
 	enum e_status			status;
 	int						meals;
-	size_t					last_meal;
-	sem_t					*last_meal_sem;
+	t_bool					*ate_enough;
+	size_t					*last_meal;
 }	t_philosopher;
 
 /* ************************************** */

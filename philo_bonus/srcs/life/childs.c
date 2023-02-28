@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 15:28:13 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:38:01 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -16,25 +16,21 @@ static void	exit_child(t_philosopher *philosophers,
 {
 	while (1)
 	{
-		sem_wait(rules->end_sem);
-		if (rules->end)
+		sem_wait(rules->eating_sem);
+		if (*philosopher->ate_enough)
 		{
-			if (philosopher->status == finished_eating)
-			{
-				sem_post(rules->end_sem);
-				clear_and_free(rules, philosophers);
-				exit(2);
-			}
-			if (!rules->dead_sem->__align)
-			{
-				put_philosopher_action(philosopher, dead);
-				sem_post(rules->dead_sem);
-			}
-			sem_post(rules->end_sem);
+			sem_post(rules->eating_sem);
 			clear_and_free(rules, philosophers);
-			exit(1);
+			exit(2);
 		}
-		sem_post(rules->end_sem);
+		sem_post(rules->eating_sem);
+		sem_wait(rules->finish_sem);
+		if(get_time() > *philosopher->last_meal + rules->time_to_die)
+		{
+			clear_and_free(rules, philosophers);
+			exit (1);
+		}
+		sem_post(rules->finish_sem);
 	}
 }
 
@@ -44,7 +40,7 @@ void	create_child(t_philosopher *philosophers, t_philosopher *philosopher,
 	philosopher->pid = fork();
 	if (philosopher->pid == 0)
 	{
-		philosopher->last_meal = get_time();
+		*philosopher->last_meal = get_time();
 		if (pthread_create(&philosopher->thread, NULL,
 				&philosopher_routine, philosopher))
 		{

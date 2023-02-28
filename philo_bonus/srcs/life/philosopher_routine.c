@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:41:24 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 15:24:31 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 17:21:01 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -18,7 +18,7 @@ void	*philosopher_routine(void *ptr)
 
 	philosopher = (t_philosopher *)ptr;
 	rules = philosopher->rules;
-	while (!try_ending(philosopher, rules))
+	while (!rules->end && !*philosopher->ate_enough)
 	{
 		try_thinking(philosopher, rules);
 		try_grabbing_forks(philosopher, rules);
