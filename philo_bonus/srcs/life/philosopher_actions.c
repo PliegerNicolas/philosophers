@@ -6,16 +6,19 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/24 12:11:32 by nplieger         ###   ########.fr       */
+/*   Updated: 2023/02/28 14:33:43 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
 
 t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 {
-	if (rules->end)
-		return (rules->end);
 	sem_wait(rules->end_sem);
+	if (rules->end)
+	{
+		sem_post(rules->end_sem);
+		return (rules->end);
+	}
 	if (rules->max_meals_per_philo >= 0
 		&& philosopher->meals == rules->max_meals_per_philo)
 	{
