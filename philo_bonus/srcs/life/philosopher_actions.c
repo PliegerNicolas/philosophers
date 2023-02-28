@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 21:56:35 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/02/28 22:00:09 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -55,7 +55,10 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 		put_philosopher_action(philosopher, grabbing_fork);
 	}
 	else
-		usleep(rules->time_to_die * 1000);
+	{
+		usleep(rules->time_to_die * 1000 + 5);
+		return ;
+	}
 	philosopher->status = grabbing_fork;
 	sem_post(rules->grabbing_forks_sem);
 }
