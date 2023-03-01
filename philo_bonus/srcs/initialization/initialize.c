@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 12:17:14 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 12:33:00 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -88,7 +88,7 @@ static t_bool	initialize_semaphores(t_rules *rules)
 	rules->grabbing_forks_sem = sem_open_new("/grabbing_forks", 1);
 	if (!rules->grabbing_forks_sem)
 		return (FALSE);
-	rules->end_sem = sem_open_new("/end", 1);
+	rules->end_sem = sem_open_new("/end", 0);
 	if (!rules->end_sem)
 		return (FALSE);
 	rules->eating_sem = sem_open_new("/eating", 1);

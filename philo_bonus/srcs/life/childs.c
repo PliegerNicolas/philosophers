@@ -6,10 +6,36 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 11:06:44 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 12:42:36 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
+
+static void	exit_child_on_death(t_philosopher *philosophers,
+	t_philosopher *philosopher, t_rules *rules)
+{
+	if (!rules->end_sem->__align)
+		put_philosopher_action(philosopher, dead);
+	else if (philosopher->status != thinking)
+		put_philosopher_action(philosopher, thinking);
+	sem_post(rules->end_sem);
+	*rules->end = TRUE;
+	sem_post(rules->finish_sem);
+	if (pthread_join(philosopher->thread, NULL))
+		printf("error in pthread join1.\n");
+	clear_and_free(rules, philosophers);
+	exit (1);
+}
+
+static void	exit_child_on_filled_stomach(t_philosopher *philosophers,
+	t_philosopher *philosopher, t_rules *rules)
+{
+	sem_post(rules->eating_sem);
+	if (pthread_join(philosopher->thread, NULL))
+		printf("error in pthread join1.\n");
+	clear_and_free(rules, philosophers);
+	exit(2);
+}
 
 static void	exit_child(t_philosopher *philosophers,
 	t_philosopher *philosopher, t_rules *rules)
@@ -18,27 +44,11 @@ static void	exit_child(t_philosopher *philosophers,
 	{
 		sem_wait(rules->eating_sem);
 		if (*philosopher->ate_enough)
-		{
-			sem_post(rules->eating_sem);
-			if (pthread_join(philosopher->thread, NULL))
-				printf("error in pthread join1.\n");
-			clear_and_free(rules, philosophers);
-			exit(2);
-		}
+			exit_child_on_filled_stomach(philosophers, philosopher, rules);
 		sem_post(rules->eating_sem);
 		sem_wait(rules->finish_sem);
 		if (get_time() > *philosopher->last_meal + rules->time_to_die)
-		{
-			printf("philo %d : %d\n", philosopher->id, *rules->end); // test
-			if (!*rules->end)
-				put_philosopher_action(philosopher, dead);
-			*rules->end = TRUE;
-			sem_post(rules->finish_sem);
-			if (pthread_join(philosopher->thread, NULL))
-				printf("error in pthread join1.\n");
-			clear_and_free(rules, philosophers);
-			exit (1);
-		}
+			exit_child_on_death(philosophers, philosopher, rules);
 		sem_post(rules->finish_sem);
 	}
 }

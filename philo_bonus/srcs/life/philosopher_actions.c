@@ -6,31 +6,10 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 12:18:46 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 12:54:00 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
-
-t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
-{
-	sem_wait(rules->eating_sem);
-	sem_wait(rules->finish_sem);
-	if ((get_time() > *philosopher->last_meal + rules->time_to_die)
-		|| *philosopher->ate_enough || *rules->end)
-	{
-		sem_post(rules->eating_sem);
-		if (!*rules->end && !*philosopher->ate_enough)
-		{
-			put_philosopher_action(philosopher, dead);
-			*rules->end = TRUE;
-		}
-		sem_post(rules->finish_sem);
-		return (FALSE);
-	}
-	sem_post(rules->eating_sem);
-	sem_post(rules->finish_sem);
-	return (TRUE);
-}
 
 void	try_thinking(t_philosopher *philosopher, t_rules *rules)
 {
@@ -58,6 +37,26 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 	sem_post(rules->grabbing_forks_sem);
 }
 
+static void	eating_process(t_philosopher *philosopher, t_rules *rules)
+{
+	put_philosopher_action(philosopher, eating);
+	philosopher->status = eating;
+	sem_post(rules->eating_sem);
+	usleep(rules->time_to_eat * 1000);
+	sem_post(rules->forks_sem);
+	sem_post(rules->forks_sem);
+	sem_wait(rules->eating_sem);
+	*philosopher->last_meal = get_time();
+	philosopher->meals++;
+	if (rules->max_meals_per_philo > 0
+		&& philosopher->meals >= rules->max_meals_per_philo)
+	{
+		put_philosopher_action(philosopher, thinking);
+		*philosopher->ate_enough = TRUE;
+	}
+	sem_post(rules->eating_sem);
+}
+
 void	try_eating(t_philosopher *philosopher, t_rules *rules)
 {
 	if (philosopher->status != grabbing_fork || !try_ending(philosopher, rules))
@@ -76,22 +75,7 @@ void	try_eating(t_philosopher *philosopher, t_rules *rules)
 		sem_post(rules->eating_sem);
 		return ;
 	}
-	put_philosopher_action(philosopher, eating);
-	philosopher->status = eating;
-	sem_post(rules->eating_sem);
-	usleep(rules->time_to_eat * 1000);
-	sem_post(rules->forks_sem);
-	sem_post(rules->forks_sem);
-	sem_wait(rules->eating_sem);
-	*philosopher->last_meal = get_time();
-	philosopher->meals++;
-	if (rules->max_meals_per_philo > 0
-		&& philosopher->meals >= rules->max_meals_per_philo)
-	{
-		put_philosopher_action(philosopher, thinking);
-		*philosopher->ate_enough = TRUE;
-	}
-	sem_post(rules->eating_sem);
+	eating_process(philosopher, rules);
 	if (try_ending(philosopher, rules))
 		return ;
 }
