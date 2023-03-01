@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 23:17:50 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 11:06:44 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -29,10 +29,13 @@ static void	exit_child(t_philosopher *philosophers,
 		sem_wait(rules->finish_sem);
 		if (get_time() > *philosopher->last_meal + rules->time_to_die)
 		{
+			printf("philo %d : %d\n", philosopher->id, *rules->end); // test
 			if (!*rules->end)
 				put_philosopher_action(philosopher, dead);
 			*rules->end = TRUE;
-			pthread_detach(philosopher->thread);
+			sem_post(rules->finish_sem);
+			if (pthread_join(philosopher->thread, NULL))
+				printf("error in pthread join1.\n");
 			clear_and_free(rules, philosophers);
 			exit (1);
 		}

@@ -6,27 +6,21 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 23:16:44 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 10:59:33 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
 
 t_bool	try_ending(t_philosopher *philosopher, t_rules *rules)
 {
-	if (*philosopher->ate_enough)
-		return (FALSE);
 	sem_wait(rules->eating_sem);
 	sem_wait(rules->finish_sem);
 	if ((get_time() > *philosopher->last_meal + rules->time_to_die)
-		|| *philosopher->ate_enough)
+		|| *philosopher->ate_enough || *rules->end)
 	{
 		sem_post(rules->eating_sem);
 		if (!*rules->end && !*philosopher->ate_enough)
-		{
-			sem_post(rules->finish_sem);
 			*rules->end = TRUE;
-			put_philosopher_action(philosopher, dead);
-		}
 		sem_post(rules->finish_sem);
 		return (FALSE);
 	}
@@ -67,7 +61,14 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 void	try_eating(t_philosopher *philosopher, t_rules *rules)
 {
 	if (philosopher->status != grabbing_fork || !try_ending(philosopher, rules))
+	{
+		if (*rules->end)
+		{
+			sem_post(rules->forks_sem);
+			sem_post(rules->forks_sem);
+		}
 		return ;
+	}
 	sem_wait(rules->eating_sem);
 	put_philosopher_action(philosopher, eating);
 	philosopher->status = eating;
