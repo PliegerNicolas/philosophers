@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 12:54:00 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 16:10:24 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -39,6 +39,12 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 
 static void	eating_process(t_philosopher *philosopher, t_rules *rules)
 {
+	sem_wait(rules->eating_sem);
+	if (rules->total_philos <= 1)
+	{
+		sem_post(rules->eating_sem);
+		return ;
+	}
 	put_philosopher_action(philosopher, eating);
 	philosopher->status = eating;
 	sem_post(rules->eating_sem);
@@ -67,12 +73,6 @@ void	try_eating(t_philosopher *philosopher, t_rules *rules)
 			if (rules->total_philos > 1)
 				sem_post(rules->forks_sem);
 		}
-		return ;
-	}
-	sem_wait(rules->eating_sem);
-	if (rules->total_philos <= 1)
-	{
-		sem_post(rules->eating_sem);
 		return ;
 	}
 	eating_process(philosopher, rules);
