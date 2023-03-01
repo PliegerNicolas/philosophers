@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 19:47:21 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 16:10:24 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:38:30 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -33,7 +33,9 @@ void	try_grabbing_forks(t_philosopher *philosopher, t_rules *rules)
 	}
 	else
 		usleep(rules->time_to_die * 1000 + 5);
+	sem_wait(rules->finish_sem);
 	philosopher->status = grabbing_fork;
+	sem_post(rules->finish_sem);
 	sem_post(rules->grabbing_forks_sem);
 }
 
@@ -52,7 +54,9 @@ static void	eating_process(t_philosopher *philosopher, t_rules *rules)
 	sem_post(rules->forks_sem);
 	sem_post(rules->forks_sem);
 	sem_wait(rules->eating_sem);
+	sem_wait(rules->finish_sem);
 	*philosopher->last_meal = get_time();
+	sem_post(rules->finish_sem);
 	philosopher->meals++;
 	if (rules->max_meals_per_philo > 0
 		&& philosopher->meals >= rules->max_meals_per_philo)

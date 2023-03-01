@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/20 15:15:39 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 12:42:36 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 17:34:46 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -18,8 +18,8 @@ static void	exit_child_on_death(t_philosopher *philosophers,
 		put_philosopher_action(philosopher, dead);
 	else if (philosopher->status != thinking)
 		put_philosopher_action(philosopher, thinking);
-	sem_post(rules->end_sem);
 	*rules->end = TRUE;
+	sem_post(rules->end_sem);
 	sem_post(rules->finish_sem);
 	if (pthread_join(philosopher->thread, NULL))
 		printf("error in pthread join1.\n");
