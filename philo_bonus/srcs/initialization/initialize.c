@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 12:30:49 by nicolas           #+#    #+#             */
-/*   Updated: 2023/02/28 23:11:36 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/01 12:17:14 by nicolas          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -37,7 +37,8 @@ static t_bool	initialize_rules(t_rules *rules, int argc, char **argv)
 	return (TRUE);
 }
 
-static t_bool	initialize_philosopher(t_philosopher *philosopher, t_rules *rules)
+static t_bool	initialize_philosopher(t_philosopher *philosopher,
+	t_rules *rules)
 {
 	philosopher->rules = rules;
 	philosopher->pid = -1;
