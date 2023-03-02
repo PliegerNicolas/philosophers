@@ -6,7 +6,7 @@
 #    By: nplieger <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/08 09:31:21 by nplieger          #+#    #+#              #
-#    Updated: 2023/03/01 17:43:28 by nicolas          ###   ########.fr        #
+#    Updated: 2023/03/02 10:58:46 by nplieger         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,8 @@ INC_DIR				:=		includes
 #------------------------------------------------#
 #   INGREDIENTS                                  #
 #------------------------------------------------#
+
+DEPS				:=		philosophers_bonus \
 
 SRCS				:=		philosophers \
 							output/usage \
@@ -46,6 +48,9 @@ SRCS				:=		philosophers \
 							life/philosopher_routine \
 							life/philosopher_actions \
 
+DEPS_H				:=		$(addsuffix .h, $(DEPS))
+CC_DEPS_H			:=		$(addsuffix $(DEPS_H), $(INC_DIR)/)
+
 SRCS_C				:=		$(addsuffix .c, $(SRCS))
 CC_SRCS_C			:=		$(addsuffix $(SRC_DIR)/, $(SRCS_C))
 
@@ -58,7 +63,7 @@ OBJS				:=		$(SRCS_C:%.c=$(OBJ_DIR)/%.o)
 CC					:=		gcc
 AR					:=		ar -rcs
 INCS				:=		-I $(INC_DIR) -lpthread
-CFLAGS				:=		-Wall -Wextra -Werror -D_REENTRANT -O3
+CFLAGS				:=		-Wall -Wextra -Werror -O3
 RM					:=		rm -f
 
 #------------------------------------------------#
@@ -80,7 +85,7 @@ $(NAME):			$(OBJS)
 	$(AR) $(NAME).a $(OBJS)
 	$(CC) $(CFLAGS) $(NAME).a -o ./$(NAME)
 
-$(OBJS):			$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+$(OBJS):			$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(CC_DEPS_H)
 	mkdir -p $(@D)
 	$(CC) $(CFLAGS) $(INCS) -c $< -o $@
 

@@ -6,7 +6,7 @@
 /*   By: nicolas <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 18:40:44 by nicolas           #+#    #+#             */
-/*   Updated: 2023/03/01 12:37:32 by nicolas          ###   ########.fr       */
+/*   Updated: 2023/03/02 11:01:45 by nplieger         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "philosophers_bonus.h"
@@ -15,9 +15,12 @@ void	put_philosopher_action(t_philosopher *philo, enum e_status action)
 {
 	size_t		time;
 
-	if (philo->rules->end_sem->__align)
-		return ;
 	sem_wait(philo->rules->write_sem);
+	if (philo->rules->end_sem->__align)
+	{
+		sem_post(philo->rules->write_sem);
+		return ;
+	}
 	time = get_time() - philo->rules->start_time;
 	if (action == dead)
 		printf("%s%06ld %s%d%s died%s\n", LIGHT_GRAY, time,
