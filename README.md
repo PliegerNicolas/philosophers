@@ -3,6 +3,8 @@
 
 A 42 school project. It's purpose is to teach the student about threads and mutexes (standard version). And forks and semaphores (bonus version).
 
+/!\ After verification, if the results are as expected or not depends on the performances of the computer. This version is incorrect.
+
 ## Standard version
 
 #### Subject :
