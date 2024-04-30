@@ -3,7 +3,7 @@
 
 A 42 school project. It's purpose is to teach the student about threads and mutexes (standard version). And forks and semaphores (bonus version).
 
-/!\ If you are a 42 student, do not copy this project as it isn't correct under this form. It is currently dependent on the computer's performance.
+/!\ If you are a 42 student, do not copy this project as it isn't correct in it's current form.
 
 ## Standard version
 
